@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}BAS Observing Sites{% endblock %}
+
+{% block content %}
+    <div class="context-info">
+        <p>Help us create a list of all the publically available observation sites available in the Chattanooga area. Emails are collected and listed with the location as a point of contact if a member is seeking additional info.</p>
+    </div>
+    <div class="page-layout">
+        <div class="map-section">
+            <div id="map"></div>
+        </div>
+
+        <div class="form-section">
+            <h2>Add New Location</h2>
+            <p class="section-help">Add the location by Address or by entering the lattitude/longitude manually.</p>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category,message in messages %}
+                        <span class="alert alert-{{ category }} fade-out">{{ message }}</span>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <form method="POST" action="{{ url_for('add_location') }}">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Search Address</label>
+                    <input type="text" id="address" placeholder="Type to search for a location...">
+                </div>
+                <div class="form-group">
+                    <label for="latitude">Latitude</label>
+                    <input type="number" step="any" id="latitude" name="latitude" required>
+                </div>
+                <div class="form-group">
+                    <label for="longitude">Longitude</label>
+                    <input type="number" step="any" id="longitude" name="longitude" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <span class="field-help">Any helpful information about the location. e.g: "Stay off the ball fields" or "East and west facing views only"</span>
+                    <textarea id="description" name="description" rows="3" required></textarea>
+                </div>
+                <p class="form-help">Press Add to Map to save the location</p>
+                <div class="button-group">
+                    <button type="submit">Add to Map</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Handle flash message fadeout
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 300); // Remove after fade animation
+                }, 5000); // Start fade after 5 seconds
+            });
+        });
+
+        // Prevent form submission on Enter key
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        });
+
+        function initAutocomplete() {
+            const addressInput = document.getElementById('address');
+            const latInput = document.getElementById('latitude');
+            const lonInput = document.getElementById('longitude');
+
+            const autocomplete = new google.maps.places.Autocomplete(addressInput, {
+                types: ['geocode', 'establishment']
+            });
+
+            autocomplete.addListener('place_changed', function() {
+                const place = autocomplete.getPlace();
+                
+                if (!place.geometry) {
+                    console.error("No location data for this place");
+                    return;
+                }
+
+                const lat = place.geometry.location.lat();
+                const lng = place.geometry.location.lng();
+
+                latInput.value = lat;
+                lonInput.value = lng;
+            });
+        }
+
+        async function initMap() {
+            try {
+                const response = await fetch('/api/map-data');
+                const mapData = await response.json();
+                
+                const map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: mapData.zoom,
+                    center: mapData.center
+                });
+
+                console.log("Map data:", mapData);
+                mapData.markers.forEach(markerData => {
+                    const marker = new google.maps.Marker({
+                        position: markerData.position,
+                        map: map,
+                        title: markerData.title
+                    });
+
+                    const infowindow = new google.maps.InfoWindow({
+                        maxWidth: 375,
+                        content: `
+                            <div class="info-window">
+                                <h3 style="margin-top: 0;">${markerData.title}</h3>
+                                <p>${markerData.info.description}</p>
+                                <p><strong>Contact:</strong> ${markerData.info.email}</p>
+                                <p><strong>Location:</strong> ${markerData.position.lat.toFixed(6)}, ${markerData.position.lng.toFixed(6)}</p>
+                                <p><a href="${markerData.info.directions_url}" target="_blank" class="directions-link">Get Directions</a></p>
+                            </div>
+                        `
+                    });
+
+                    // Keep InfoWindow open on click
+                    marker.addListener('click', () => {
+                        infowindow.open(map, marker);
+                        // Close any other open InfoWindows
+                        mapData.markers.forEach(m => {
+                            if (m !== markerData) {
+                                m.infoWindow?.close();
+                            }
+                        });
+                    });
+
+                    // Store reference to InfoWindow
+                    markerData.infoWindow = infowindow;
+                });
+            } catch (error) {
+                console.error('Error loading map data:', error);
+                alert('Error loading map data. Please try again later.');
+            }
+        }
+
+        window.onload = () => {
+            initAutocomplete();
+            initMap();
+        };
+    </script>
+{% endblock %} 
