@@ -39,6 +39,17 @@ header {
     align-items: center;
 }
 
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-logo {
+    height: 40px;
+    width: auto;
+}
+
 .header-subtitle {
     font-family: 'Space Grotesk', sans-serif;
     margin: 0;
@@ -52,8 +63,7 @@ header h1 {
     font-size: 1.8rem;
     color: var(--color-white);
     font-weight: 400;
-    font-family: 'Arsenal', sans-serif;
-    text-transform: uppercase;
+    font-family: 'Arsenal SC', sans-serif;
 }
 
 .page-layout {

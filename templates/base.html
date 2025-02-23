@@ -4,7 +4,7 @@
     <title>{% block title %}BAS Observing Sites{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Arsenal:wght@400;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Arsenal+SC:wght@400&family=Space+Grotesk:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
     {% block head %}{% endblock %}
@@ -12,7 +12,10 @@
 <body>
     <header>
         <div class="header-content">
-            <h1>Barnard Astronomical Society</h1>
+            <div class="header-left">
+                <img src="{{ url_for('static', filename='images/BASLogo.png') }}" alt="BAS Logo" class="header-logo">
+                <h1>Barnard Astronomical Society</h1>
+            </div>
             <h2 class="header-subtitle">Observing Sites</h2>
         </div>
     </header>
