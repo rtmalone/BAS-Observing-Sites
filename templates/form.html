@@ -108,7 +108,8 @@
                 
                 const map = new google.maps.Map(document.getElementById('map'), {
                     zoom: mapData.zoom,
-                    center: mapData.center
+                    center: mapData.center,
+                    mapTypeId: 'terrain'
                 });
 
                 mapData.markers.forEach(markerData => {
