@@ -11,12 +11,17 @@ load_dotenv()
 # Verify required environment variables are set
 if not os.getenv('SECRET_KEY'):
     raise ValueError("No SECRET_KEY set for Flask application")
+if not os.getenv('MYSQL_DATABASE'):
+    raise ValueError("No MYSQL_DATABASE set for Flask application")
 
 # Initialize Google Maps client
 gmaps = googlemaps.Client(key=os.getenv('GOOGLE_MAPS_API_KEY'))
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///locations.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    f"mysql://{os.getenv('MYSQL_USER')}:{os.getenv('MYSQL_PASSWORD')}@"
+    f"{os.getenv('MYSQL_HOST')}/{os.getenv('MYSQL_DATABASE')}"
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')  # Required for flash messages
 db = SQLAlchemy(app)

@@ -23,7 +23,7 @@ This application allows members to:
 ## Technical Stack
 
 - **Backend**: Python/Flask
-- **Database**: SQLite with SQLAlchemy ORM
+- **Database**: MySQL with SQLAlchemy ORM
 - **Frontend**: HTML/CSS with Google Maps JavaScript API
 - **APIs**: Google Maps (Places, Directions)
 
@@ -36,14 +36,22 @@ This application allows members to:
 pip install -r requirements.txt
 ```
 
-3. Create a `.env` file with:
+3. Set up MySQL database:
+   - Create a new MySQL database
+   - Create a user with appropriate permissions
+
+4. Create a `.env` file with:
 
 ```
 GOOGLE_MAPS_API_KEY=your_api_key
 SECRET_KEY=your_secret_key
+MYSQL_HOST=localhost
+MYSQL_USER=your_mysql_user
+MYSQL_PASSWORD=your_mysql_password
+MYSQL_DATABASE=bas_observing_sites
 ```
 
-4. Run the application:
+5. Run the application:
 
 ```bash
 python app.py
