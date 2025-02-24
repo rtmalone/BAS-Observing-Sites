@@ -75,6 +75,7 @@ header h1 {
     background: var(--color-transparent-dark);
     padding: var(--spacing-standard);
     border-radius: 0 calc(var(--border-radius) * 2) calc(var(--border-radius) * 2) 0;
+    position: relative;
 }
 
 .map-section {
@@ -214,8 +215,14 @@ h2 {
     padding: 5px;
     border-radius: var(--border-radius);
     text-align: center;
-    width: 100%;
-    margin-bottom: 1em;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    margin-top: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 99;
     font-weight: bold;
     transition: opacity 0.3s ease-in-out;
 }
