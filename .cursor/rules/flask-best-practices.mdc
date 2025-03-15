@@ -1,0 +1,11 @@
+---
+description: Best practices for Flask web applications
+globs: **/*.py
+---
+- Use Flask application factories for modularity and testing
+- Organize routes using Blueprints for better code organization
+- Implement custom error handlers for different types of exceptions
+- Use Flask's request lifecycle decorators (before_request, after_request, teardown_request)
+- Utilize Flask extensions for common functionalities
+- Manage configurations using Flask's config object
+- Implement proper logging using Flask's app.logger

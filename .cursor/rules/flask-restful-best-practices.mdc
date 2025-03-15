@@ -1,0 +1,9 @@
+---
+description: Best practices for building RESTful APIs with Flask-RESTful
+globs: **/*.py
+---
+- Use class-based views for API resources
+- Implement proper request parsing and validation
+- Use Flask-RESTful's built-in error handling
+- Organize API endpoints using Flask Blueprints
+- Implement proper API versioning

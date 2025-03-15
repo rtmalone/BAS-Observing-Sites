@@ -1,0 +1,9 @@
+---
+description: Best practices for using Flask-SQLAlchemy for ORM operations
+globs: **/*.py
+---
+- Use SQLAlchemy's session management properly
+- Implement database migrations using Flask-Migrate
+- Use eager loading and indexing for query optimization
+- Implement proper database session management
+- Use connection pooling for database connections
