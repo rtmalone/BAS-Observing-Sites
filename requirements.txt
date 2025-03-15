@@ -4,4 +4,5 @@ python-dotenv==1.0.1
 googlemaps==4.10.0
 SQLAlchemy==2.0.28
 Werkzeug==3.0.1
-mysqlclient==2.2.4 
+mysqlclient==2.2.4
+requests==2.31.0 

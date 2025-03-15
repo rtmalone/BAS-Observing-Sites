@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}BAS Observing Sites{% endblock %}
+
+{% block content %}
+        {% include 'context_info.html' %}
+        <div class="page-layout">
+            {% include 'map.html' %}
+            <div class="form-section">
+                <h2>Add New Location</h2>
+                <p class="section-help">Authenticate with your BAS Membership via JoinIt.</p>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <span class="alert alert-{{ category }} fade-out">{{ message }}</span>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <form method="POST" action="{{ url_for('authenticate') }}">
+                    <div class="button-group">
+                        <button type="submit">Authenticate with JoinIt</button>
+                    </div>
+                </form>
+                {% if config.get('DEV_MODE') %}
+                    <p class="dev-mode-notice">Development Mode: Click to simulate successful authentication</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

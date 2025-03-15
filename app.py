@@ -1,9 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from decimal import Decimal
 from dotenv import load_dotenv
 import googlemaps
 import os
+from functools import wraps
+import requests
+from datetime import timedelta
 
 # Load environment variables
 load_dotenv()
@@ -13,11 +16,18 @@ if not os.getenv('SECRET_KEY'):
     raise ValueError("No SECRET_KEY set for Flask application")
 if not os.getenv('MYSQL_DATABASE'):
     raise ValueError("No MYSQL_DATABASE set for Flask application")
+if not os.getenv('JOINIT_CLIENT_ID'):
+    raise ValueError("No JOINIT_CLIENT_ID set for Flask application")
+if not os.getenv('JOINIT_CLIENT_SECRET'):
+    raise ValueError("No JOINIT_CLIENT_SECRET set for Flask application")
 
 # Initialize Google Maps client
 gmaps = googlemaps.Client(key=os.getenv('GOOGLE_MAPS_API_KEY'))
 
 app = Flask(__name__)
+
+# Session configuration
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=24)  # Sessions last 24 hours
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     f"mysql://{os.getenv('MYSQL_USER')}:{os.getenv('MYSQL_PASSWORD')}@"
     f"{os.getenv('MYSQL_HOST')}/{os.getenv('MYSQL_DATABASE')}"
@@ -25,6 +35,18 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')  # Required for flash messages
 db = SQLAlchemy(app)
+
+JOINIT_AUTH_URL = "https://app.joinit.com/oauth2/authorize"
+JOINIT_TOKEN_URL = "https://app.joinitapi.com/oauth2/token"
+
+# Development mock settings
+DEV_MODE = True  # Set to False in production
+MOCK_USER = {
+    'username': 'test_user',
+    'email': 'test@barnardastro.org',
+    'member_id': '12345'
+}
+app.config['DEV_MODE'] = DEV_MODE
 
 class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -46,7 +68,93 @@ def is_duplicate_location(lat: float, lon: float) -> bool:
             return True
     return False
 
-@app.route('/', methods=['GET', 'POST'])
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'authenticated' not in session:
+            flash('Please log in first', 'error')
+            return redirect(url_for('home'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route('/')
+def home():
+    if 'authenticated' in session:
+        return redirect(url_for('add_location'))
+    return render_template('auth.html', google_maps_api_key=os.getenv('GOOGLE_MAPS_API_KEY'))
+
+@app.route('/authenticate', methods=['POST'])
+def authenticate():
+    if DEV_MODE:
+        # Mock successful authentication
+        session.permanent = True  # Make session permanent
+        session['authenticated'] = True
+        session['username'] = MOCK_USER['username']
+        session['email'] = MOCK_USER['email']
+        session['member_id'] = MOCK_USER['member_id']
+        flash('Development mode: Successfully authenticated', 'success')
+        return redirect(url_for('add_location'))
+    
+    auth_params = {
+        'response_type': 'code',
+        'client_id': os.getenv('JOINIT_CLIENT_ID'),
+        'redirect_uri': os.getenv('JOINIT_REDIRECT_URI'),
+        'state': os.urandom(16).hex()  # Generate random state
+    }
+    
+    # Store state in session to verify later
+    session['oauth_state'] = auth_params['state']
+    
+    # Redirect to JoinIt's authorization URL
+    auth_url = f"{JOINIT_AUTH_URL}?{'&'.join(f'{k}={v}' for k, v in auth_params.items())}"
+    return redirect(auth_url)
+
+@app.route('/callback')
+def oauth_callback():
+    if DEV_MODE:
+        return redirect(url_for('add_location'))
+    
+    # Verify state to prevent CSRF
+    if request.args.get('state') != session.get('oauth_state'):
+        flash('Invalid state parameter', 'error')
+        return redirect(url_for('home'))
+    
+    # Exchange code for token
+    code = request.args.get('code')
+    if not code:
+        flash('Authorization failed', 'error')
+        return redirect(url_for('home'))
+    
+    token_data = {
+        'client_id': os.getenv('JOINIT_CLIENT_ID'),
+        'client_secret': os.getenv('JOINIT_CLIENT_SECRET'),
+        'code': code
+    }
+    
+    try:
+        response = requests.post(JOINIT_TOKEN_URL, data=token_data)
+        response.raise_for_status()
+        token_info = response.json()
+        
+        # Store the access token and mark as authenticated
+        session['access_token'] = token_info['access_token']
+        session['authenticated'] = True
+        
+        flash('Successfully authenticated', 'success')
+        return redirect(url_for('add_location'))
+        
+    except requests.exceptions.RequestException as e:
+        flash('Authentication failed', 'error')
+        return redirect(url_for('home'))
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('You have been logged out', 'success')
+    return redirect(url_for('home'))
+
+@app.route('/add', methods=['GET', 'POST'])
+@login_required
 def add_location():
     if request.method == 'POST':
         title = request.form['title']

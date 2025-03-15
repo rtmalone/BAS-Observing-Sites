@@ -9,7 +9,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
     {% block head %}{% endblock %}
 </head>
-<body>
+<body {% if config['DEV_MODE'] %}data-dev-mode="true"{% endif %}>
     <header>
         <div class="header-content">
             <div class="header-left">
@@ -19,8 +19,32 @@
             <h2 class="header-subtitle">Observing Sites</h2>
         </div>
     </header>
+    {% if session.authenticated %}
+        <div class="user-status">
+            <div class="user-status-content">
+                <span>
+                    Logged in as {{ session.username }}
+                </span>
+                <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
+            </div>
+        </div>
+    {% endif %}
     <div class="container">
         {% block content %}{% endblock %}
     </div>
+    <script>
+        // Handle flash message fadeout
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 300); // Remove after fade animation
+                }, 5000); // Start fade after 5 seconds
+            });
+        });
+    </script>
 </body>
 </html> 

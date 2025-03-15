@@ -9,6 +9,7 @@ body {
     --color-transparent-light: rgba(255, 255, 255, 0.7);
     --max-width: 1200px;
     --form-width: 400px;
+    --blur-amount: 8px;
     background: #5f5d6c;
     color: var(--color-white);
     font-family: Arial, sans-serif;
@@ -27,7 +28,7 @@ header {
     position: sticky;
     top: 0;
     z-index: 1000;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(var(--blur-amount));
 }
 
 .header-content {
@@ -60,7 +61,7 @@ header {
 
 header h1 {
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: var(--color-white);
     font-weight: 400;
     font-family: 'Arsenal SC', sans-serif;
@@ -119,6 +120,7 @@ form {
     text-align: center;
     color: var(--color-transparent-light);
     margin: -20px 0 20px;
+    font-size: 1.2rem;
 }
 
 .form-group input,
@@ -178,7 +180,8 @@ form {
     padding: 15px var(--spacing-standard);
     background: var(--color-transparent-dark);
     border-radius: calc(var(--border-radius) * 2);
-    line-height: 1.5;
+    line-height: 1.2;
+    font-size: 1.2rem;
 }
 
 h2 {
@@ -228,11 +231,11 @@ h2 {
 }
 
 .alert.alert-error {
-    background: rgb(255, 128, 128);
+    background: rgb(218, 91, 91);
 }
 
 .alert.alert-success {
-    background: rgb(98, 209, 98);
+    background: rgb(78, 174, 78);
 }
 
 /* Google Places Autocomplete styling */
@@ -256,4 +259,49 @@ h2 {
 
 .pac-item-selected {
     background-color: rgba(0, 0, 0, 0.2);
+}
+
+.user-status {
+    background: var(--color-transparent-dark);
+    padding: 8px var(--spacing-standard);
+    text-align: right;
+    font-size: 0.9em;
+    position: sticky;
+    top: 72px;
+    z-index: 999;  /* Just below header z-index */
+    backdrop-filter: blur(var(--blur-amount));
+}
+
+body[data-dev-mode="true"] .user-status {
+    background: rgba(255, 235, 59, 0.8);
+    color: #000000;
+}
+
+.user-status-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.logout-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+.logout-link:hover {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
+}
+
+.dev-mode-notice {
+    margin-top: 20px;
+    padding: 10px;
+    background: rgba(255, 255, 0, 0.8);
+    border-radius: var(--border-radius);
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--color-black);
 }
