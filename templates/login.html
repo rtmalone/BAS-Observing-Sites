@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Login - BAS Observing Sites{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} fade-out">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="logo">
+        <h2>Sign In</h2>
+    </div>
+    
+    <div class="helper-text">
+        Authenticate with the email you used to sign up for BAS
+    </div>
+    
+    <form action="{{ url_for('request_magic_link') }}" method="POST">
+        <div class="form-group">
+            <input type="email" class="form-control" id="email" name="email" required 
+                   placeholder="Enter your email">
+        </div>
+        <div class="form-text">
+            We'll send you a magic link to sign in.
+        </div>
+        <button type="submit" class="btn-primary">Send Magic Link</button>
+    </form>
+</div>
+{% endblock %} 

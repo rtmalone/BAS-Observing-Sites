@@ -3,14 +3,9 @@
 {% block title %}BAS Observing Sites{% endblock %}
 
 {% block content %}
-    <div class="context-info">
-        <p>Help us create a list of all the publically available observation sites available in the Chattanooga area. Emails are collected and listed with the location as a point of contact if a member is seeking additional info.</p>
-    </div>
+    {% include 'context_info.html' %}
     <div class="page-layout">
-        <div class="map-section">
-            <div id="map"></div>
-        </div>
-
+        {% include 'map.html' %}
         <div class="form-section">
             <h2>Add New Location</h2>
             <p class="section-help">Add the location by Address or by entering the lattitude/longitude manually.</p>
@@ -28,7 +23,7 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" value="{{ session.email }}" required>
                 </div>
                 <div class="form-group">
                     <label for="address">Search Address</label>
@@ -56,19 +51,6 @@
     </div>
 
     <script>
-        // Handle flash message fadeout
-        document.addEventListener('DOMContentLoaded', function() {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                setTimeout(() => {
-                    alert.style.opacity = '0';
-                    setTimeout(() => {
-                        alert.remove();
-                    }, 300); // Remove after fade animation
-                }, 5000); // Start fade after 5 seconds
-            });
-        });
-
         // Prevent form submission on Enter key
         document.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {

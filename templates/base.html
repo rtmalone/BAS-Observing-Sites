@@ -9,7 +9,15 @@
     <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
     {% block head %}{% endblock %}
 </head>
-<body>
+<body {% if config['DEV_MODE'] %}data-dev-mode="true"{% endif %}>
+    {% if session.user_id %}
+        <div class="user-status">
+            <div class="user-status-content">
+                <span>Logged in as {{ session.user_email }}</span>
+                <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
+            </div>
+        </div>
+    {% endif %}
     <header>
         <div class="header-content">
             <div class="header-left">
@@ -22,5 +30,19 @@
     <div class="container">
         {% block content %}{% endblock %}
     </div>
+    <script>
+        // Handle flash message fadeout
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alerts');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 300); // Remove after fade animation
+                }, 5000); // Start fade after 5 seconds
+            });
+        });
+    </script>
 </body>
 </html> 

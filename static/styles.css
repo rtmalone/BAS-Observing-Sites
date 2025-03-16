@@ -3,12 +3,13 @@ body {
     --spacing-standard: 20px;
     --color-white: #ffffff;
     --color-black: #000000;
-    --color-primary: #4285f4;
-    --color-primary-hover: #3367d6;
+    --color-primary: #ffd740;
+    --color-primary-hover: #ffc400;
     --color-transparent-dark: rgba(0, 0, 0, 0.2);
     --color-transparent-light: rgba(255, 255, 255, 0.7);
     --max-width: 1200px;
     --form-width: 400px;
+    --blur-amount: 8px;
     background: #5f5d6c;
     color: var(--color-white);
     font-family: Arial, sans-serif;
@@ -22,12 +23,12 @@ h2, h3, h4, h5, h6 {
 }
 
 header {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.8);
     padding: 1rem 0;
     position: sticky;
-    top: 0;
+    top: 34px;
     z-index: 1000;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(var(--blur-amount));
 }
 
 .header-content {
@@ -60,7 +61,7 @@ header {
 
 header h1 {
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: var(--color-white);
     font-weight: 400;
     font-family: 'Arsenal SC', sans-serif;
@@ -119,6 +120,7 @@ form {
     text-align: center;
     color: var(--color-transparent-light);
     margin: -20px 0 20px;
+    font-size: 1.2rem;
 }
 
 .form-group input,
@@ -142,7 +144,7 @@ form {
     border: none;
     border-radius: var(--border-radius);
     background: var(--color-primary);
-    color: var(--color-white);
+    color: var(--color-black);
     font-weight: bold;
     cursor: pointer;
     font-size: 16px;
@@ -178,7 +180,8 @@ form {
     padding: 15px var(--spacing-standard);
     background: var(--color-transparent-dark);
     border-radius: calc(var(--border-radius) * 2);
-    line-height: 1.5;
+    line-height: 1.2;
+    font-size: 1.2rem;
 }
 
 h2 {
@@ -198,7 +201,7 @@ h2 {
 .directions-link {
     display: inline-block;
     background: var(--color-primary);
-    color: var(--color-white);
+    color: var(--color-black);
     padding: 5px 10px;
     border-radius: var(--border-radius);
     text-decoration: none;
@@ -211,28 +214,35 @@ h2 {
 
 /* Flash messages */
 .alert {
-    display: block;
-    padding: 5px;
+    padding: 8px;
     border-radius: var(--border-radius);
-    text-align: center;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    margin-top: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 99;
     font-weight: bold;
     transition: opacity 0.3s ease-in-out;
 }
 
 .alert.alert-error {
-    background: rgb(255, 128, 128);
+    background: rgb(218, 91, 91);
 }
 
 .alert.alert-success {
-    background: rgb(98, 209, 98);
+    background: rgb(78, 174, 78);
+}
+
+/* Position alerts inside containers */
+.login-container .alert,
+.form-section .alert {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    z-index: 1;
+}
+
+.form-section .alert {
+    top: 10px;
+    text-align: center;
+    padding: 4px;
 }
 
 /* Google Places Autocomplete styling */
@@ -256,4 +266,108 @@ h2 {
 
 .pac-item-selected {
     background-color: rgba(0, 0, 0, 0.2);
+}
+
+.user-status {
+    background-color: var(--color-primary);
+    color: #000;
+    padding: 8px 0;
+    text-align: center;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+}
+
+.user-status-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-standard);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logout-link {
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}
+
+.dev-mode-notice {
+    margin-top: 20px;
+    padding: 10px;
+    background: rgba(255, 255, 0, 0.8);
+    border-radius: var(--border-radius);
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--color-black);
+}
+
+/* Login page styles */
+.login-container {
+    max-width: 400px;
+    width: 90%;
+    margin: 4rem auto;
+    padding: 3rem;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+    color: var(--color-white);
+    text-align: center;
+    position: relative;
+}
+
+.login-container .logo h2 {
+    color: var(--color-white);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem;
+    margin: 0 0 2rem 0;
+}
+
+.login-container .form-group {
+    margin-bottom: 0.5rem;
+}
+
+.login-container .form-control {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    color: var(--color-black);
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 1rem;
+}
+
+.login-container .form-text {
+    color: var(--color-transparent-light);
+    font-size: 1rem;
+    margin: 1rem 0 2rem 0;
+    text-align: center;
+}
+
+.login-container .helper-text {
+    color: var(--color-transparent-light);
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.login-container .btn-primary {
+    width: 100%;
+    background: var(--color-primary);
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    color: var(--color-black);
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.login-container .btn-primary:hover {
+    background: var(--color-primary-hover);
 }
