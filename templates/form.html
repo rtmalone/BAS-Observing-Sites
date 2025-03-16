@@ -22,7 +22,12 @@
                     <input type="text" id="title" name="title" required>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <div class="label-with-help">
+                        <label for="email">Email</label>
+                        <span class="help-icon">ⓘ
+                            <span class="tooltip">Emails are collected and may be listed with the location as a point of contact if you opt-in</span>
+                        </span>
+                    </div>
                     <input type="email" id="email" name="email" value="{{ session.email }}" required>
                     <div class="checkbox-group">
                         <input type="checkbox" id="show_email" name="show_email" value="true">
@@ -42,8 +47,12 @@
                     <input type="number" step="any" id="longitude" name="longitude" required>
                 </div>
                 <div class="form-group">
-                    <label for="description">Description</label>
-                    <span class="field-help">Any helpful information about the location. e.g: "Stay off the ball fields" or "East and west facing views only"</span>
+                    <div class="label-with-help">
+                        <label for="description">Description</label>
+                        <span class="help-icon">ⓘ
+                            <span class="tooltip">Any helpful information about the location. e.g: "Stay off the ball fields" or "East and west facing views only"</span>
+                        </span>
+                    </div>
                     <textarea id="description" name="description" rows="3" required></textarea>
                 </div>
                 <p class="form-help">Press Add to Map to save the location</p>
