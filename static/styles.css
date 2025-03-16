@@ -1,3 +1,6 @@
+/* ==========================================================================
+   CSS Variables and Base Styles
+   ========================================================================== */
 body {
     --border-radius: 4px;
     --spacing-standard: 20px;
@@ -22,6 +25,9 @@ h2, h3, h4, h5, h6 {
     font-family: 'Space Grotesk', sans-serif;
 }
 
+/* ==========================================================================
+   Header and Navigation
+   ========================================================================== */
 header {
     background: rgba(0, 0, 0, 0.8);
     padding: 1rem 0;
@@ -29,11 +35,6 @@ header {
     top: 0;
     z-index: 1000;
     backdrop-filter: blur(var(--blur-amount));
-}
-
-/* Adjust header position when user status is present */
-.user-status ~ header {
-    top: 34px;
 }
 
 .header-content {
@@ -72,20 +73,56 @@ header h1 {
     font-family: 'Arsenal SC', sans-serif;
 }
 
+/* ==========================================================================
+   User Status Bar
+   ========================================================================== */
+.user-status {
+    background-color: var(--color-primary);
+    color: #000;
+    padding: 8px 0;
+    text-align: center;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+}
+
+/* Adjust header position when user status is present */
+.user-status ~ header {
+    top: 34px;
+}
+
+.user-status-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-standard);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logout-link {
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   Layout and Container Styles
+   ========================================================================== */
+.container {
+    max-width: var(--max-width);
+    margin: 0 auto 4rem;
+    padding-top: 2rem;
+}
+
 .page-layout {
     display: grid;
     grid-template-columns: 1fr var(--form-width);
-}
-
-.form-section {
-    background: var(--color-transparent-dark);
-    padding: var(--spacing-standard);
-    border-radius: 0 calc(var(--border-radius) * 2) calc(var(--border-radius) * 2) 0;
-    position: relative;
-}
-
-.map-section {
-    min-height: 600px;
 }
 
 @media (max-width: 1024px) {
@@ -100,6 +137,9 @@ header h1 {
     }
 }
 
+/* ==========================================================================
+   Form Styles - Common
+   ========================================================================== */
 form {
     width: 100%;
 }
@@ -114,7 +154,67 @@ form {
     font-weight: bold;
 }
 
-/* Help icon and tooltip styles */
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.75rem;
+    border: 1px solid var(--color-transparent-light);
+    border-radius: var(--border-radius);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-white);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--color-transparent-light);
+}
+
+.button-group {
+    margin-top: 20px;
+}
+
+.button-group button {
+    width: 100%;
+    height: 33px;
+    border: none;
+    border-radius: var(--border-radius);
+    background: var(--color-primary);
+    color: var(--color-black);
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.button-group button:hover {
+    background: var(--color-primary-hover);
+}
+
+/* Checkbox specific styles */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+}
+
+.checkbox-group label {
+    margin: 0;
+    font-weight: normal;
+    cursor: pointer;
+    color: var(--color-transparent-light);
+    font-size: 14px;
+}
+
+/* ==========================================================================
+   Help and Tooltip Styles
+   ========================================================================== */
 .label-with-help {
     display: flex;
     align-items: flex-start;
@@ -164,6 +264,17 @@ form {
     line-height: 1.4;
 }
 
+.tooltip::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent var(--color-black) transparent transparent;
+}
+
 @media (max-width: 1024px) {
     .tooltip {
         left: auto;
@@ -183,22 +294,19 @@ form {
     }
 }
 
-.tooltip::before {
-    content: '';
-    position: absolute;
-    left: -5px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent var(--color-black) transparent transparent;
+/* ==========================================================================
+   Location Form Section
+   ========================================================================== */
+.form-section {
+    background: var(--color-transparent-dark);
+    padding: var(--spacing-standard);
+    border-radius: 0 calc(var(--border-radius) * 2) calc(var(--border-radius) * 2) 0;
+    position: relative;
 }
 
-.field-help {
-    display: block;
-    font-size: 0.9em;
-    color: var(--color-transparent-light);
-    margin-bottom: 8px;
+.form-section h2 {
+    text-align: center;
+    margin-bottom: 30px;
 }
 
 .section-help {
@@ -208,47 +316,11 @@ form {
     font-size: 1.2rem;
 }
 
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0.75rem;
-    border: 1px solid var(--color-transparent-light);
-    border-radius: var(--border-radius);
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--color-white);
-}
-
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-    color: var(--color-transparent-light);
-}
-
-.button-group {
-    margin-top: 20px;
-}
-
-.button-group button {
-    width: 100%;
-    height: 33px;
-    border: none;
-    border-radius: var(--border-radius);
-    background: var(--color-primary);
-    color: var(--color-black);
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.button-group button:hover {
-    background: var(--color-primary-hover);
-}
-
-.form-help {
-    text-align: center;
-    font-size: 0.9em;
-    color: var(--color-transparent-light);
-    margin-bottom: 10px;
+/* ==========================================================================
+   Map Section
+   ========================================================================== */
+.map-section {
+    min-height: 600px;
 }
 
 #map {
@@ -256,27 +328,6 @@ form {
     width: 100%;
     border: 1px solid #ccc;
     border-radius: var(--border-radius);
-}
-
-.container {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding-top: 2rem;
-}
-
-.context-info {
-    max-width: var(--max-width);
-    margin: 0 auto 2rem;
-    padding: 15px var(--spacing-standard);
-    background: var(--color-transparent-dark);
-    border-radius: calc(var(--border-radius) * 2);
-    line-height: 1.2;
-    font-size: 1.2rem;
-}
-
-h2 {
-    text-align: center;
-    margin-bottom: 30px;
 }
 
 .info-window {
@@ -302,108 +353,9 @@ h2 {
     background: var(--color-primary-hover);
 }
 
-/* Flash messages */
-.alert {
-    padding: 6px;
-    border-radius: var(--border-radius);
-    font-weight: bold;
-    transition: opacity 0.3s ease-in-out;
-    text-align: center;
-}
-
-.alert.alert-error {
-    background: rgb(218, 91, 91);
-}
-
-.alert.alert-success {
-    background: rgb(78, 174, 78);
-}
-
-/* Position alerts inside form sections */
-.form-section .alert {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    text-align: center;
-    padding: 4px;
-    z-index: 1;
-}
-
-/* Login form specific alert styling */
-.login-form .alert {
-    width: 100%;
-    margin-top: 1rem;
-    box-sizing: border-box;
-    position: static;
-    transform: none;
-}
-
-/* Google Places Autocomplete styling */
-.pac-container {
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
-    border: 1px solid #ccc;
-    border-top: none;
-    font-family: Arial, sans-serif;
-}
-
-.pac-item {
-    padding: 8px;
-    cursor: pointer;
-    color: #333;
-}
-
-.pac-item:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-.pac-item-selected {
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
-.user-status {
-    background-color: var(--color-primary);
-    color: #000;
-    padding: 8px 0;
-    text-align: center;
-    width: 100%;
-    position: sticky;
-    top: 0;
-    z-index: 1001;
-}
-
-.user-status-content {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 0 var(--spacing-standard);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logout-link {
-    color: #000;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.logout-link:hover {
-    text-decoration: underline;
-}
-
-.dev-mode-notice {
-    margin-top: 20px;
-    padding: 10px;
-    background: rgba(255, 255, 0, 0.8);
-    border-radius: var(--border-radius);
-    text-align: center;
-    font-size: 0.9em;
-    color: var(--color-black);
-}
-
-/* Login page styles */
+/* ==========================================================================
+   Login Page Styles
+   ========================================================================== */
 .login-container {
     max-width: var(--max-width);
     margin: 2rem auto;
@@ -428,6 +380,8 @@ h2 {
 .login-context h2 {
     color: var(--color-white);
     margin-top: 0;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
 .login-context h3 {
@@ -519,23 +473,80 @@ h2 {
     }
 }
 
-.checkbox-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 4px;
+/* ==========================================================================
+   Alert/Flash Messages
+   ========================================================================== */
+.alert {
+    padding: 6px;
+    border-radius: var(--border-radius);
+    font-weight: bold;
+    transition: opacity 0.3s ease-in-out;
+    text-align: center;
 }
 
-.checkbox-group input[type="checkbox"] {
-    width: auto;
-    margin: 0;
-    cursor: pointer;
+.alert.alert-error {
+    background: rgb(218, 91, 91);
 }
 
-.checkbox-group label {
-    margin: 0;
-    font-weight: normal;
+.alert.alert-success {
+    background: rgb(78, 174, 78);
+}
+
+/* Position alerts inside form sections */
+.form-section .alert {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    text-align: center;
+    padding: 4px;
+    z-index: 1;
+}
+
+/* Login form specific alert styling */
+.login-form .alert {
+    width: 100%;
+    margin-top: 1rem;
+    box-sizing: border-box;
+    position: static;
+    transform: none;
+}
+
+/* ==========================================================================
+   Google Places Autocomplete
+   ========================================================================== */
+.pac-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    border: 1px solid #ccc;
+    border-top: none;
+    font-family: Arial, sans-serif;
+}
+
+.pac-item {
+    padding: 8px;
     cursor: pointer;
-    color: var(--color-transparent-light);
-    font-size: 14px;
+    color: #333;
+}
+
+.pac-item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.pac-item-selected {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* ==========================================================================
+   Development Mode
+   ========================================================================== */
+.dev-mode-notice {
+    margin-top: 20px;
+    padding: 10px;
+    background: rgba(255, 255, 0, 0.8);
+    border-radius: var(--border-radius);
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--color-black);
 }
