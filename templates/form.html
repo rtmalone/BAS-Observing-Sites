@@ -24,6 +24,10 @@
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" value="{{ session.email }}" required>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="show_email" name="show_email" value="true">
+                        <label for="show_email">Display email with location marker</label>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="address">Search Address</label>
@@ -107,7 +111,7 @@
                             <div class="info-window">
                                 <h3 style="margin-top: 0;">${markerData.title}</h3>
                                 <p>${markerData.info.description}</p>
-                                <p><strong>Contact:</strong> ${markerData.info.email}</p>
+                                ${markerData.info.email ? `<p><strong>Contact:</strong> ${markerData.info.email}</p>` : ''}
                                 <p><strong>Location:</strong> ${markerData.position.lat.toFixed(6)}, ${markerData.position.lng.toFixed(6)}</p>
                                 <p><a href="${markerData.info.directions_url}" target="_blank" class="directions-link">Get Directions</a></p>
                             </div>

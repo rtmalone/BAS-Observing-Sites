@@ -78,7 +78,8 @@ def init_db():
             email VARCHAR(120) NOT NULL,
             latitude FLOAT NOT NULL,
             longitude FLOAT NOT NULL,
-            description TEXT NOT NULL
+            description TEXT NOT NULL,
+            show_email BOOLEAN DEFAULT FALSE
         )
     ''')
     
@@ -244,6 +245,7 @@ def add_location():
         lat = float(request.form['latitude'])
         lon = float(request.form['longitude'])
         description = request.form['description']
+        show_email = 'show_email' in request.form
         
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -262,9 +264,9 @@ def add_location():
         
         # Add new location
         cursor.execute('''
-            INSERT INTO locations (title, email, latitude, longitude, description)
-            VALUES (%s, %s, %s, %s, %s)
-        ''', (title, email, lat, lon, description))
+            INSERT INTO locations (title, email, latitude, longitude, description, show_email)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        ''', (title, email, lat, lon, description, show_email))
         
         conn.commit()
         cursor.close()
@@ -318,7 +320,7 @@ def get_map_data():
                 'info': {
                     'title': loc['title'],
                     'description': loc['description'],
-                    'email': loc['email'],
+                    'email': loc['email'] if loc.get('show_email', False) else None,
                     'directions_url': get_directions_url(loc['latitude'], loc['longitude'])
                 }
             }
