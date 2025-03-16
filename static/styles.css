@@ -26,9 +26,14 @@ header {
     background: rgba(0, 0, 0, 0.8);
     padding: 1rem 0;
     position: sticky;
-    top: 34px;
+    top: 0;
     z-index: 1000;
     backdrop-filter: blur(var(--blur-amount));
+}
+
+/* Adjust header position when user status is present */
+.user-status ~ header {
+    top: 34px;
 }
 
 .header-content {
