@@ -4,32 +4,53 @@
 
 {% block content %}
 <div class="login-container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} fade-out">
-                    {{ message }}
+    <div class="login-content">
+        <div class="login-context">
+            <h2>Welcome to BAS Observing Sites</h2>
+            <div class="context-content">
+                <p>Welcome to the Barnard Astronomical Society's collaborative observing site directory! This platform allows our community to share and discover the best stargazing locations in the Chattanooga area.</p>
+                
+                <h3>Why Share Your Sites?</h3>
+                <ul>
+                    <li>Help fellow astronomers find quality observation spots</li>
+                    <li>Build a comprehensive map of local dark sky (dark-ish?) locations</li>
+                    <li>Share valuable insights about site conditions and access</li>
+                </ul>
+
+                <p>Each location you add helps expand our collective knowledge and strengthens our astronomical community. Share your favorite spots, from hidden urban gems to remote dark sky havens.</p>
+            </div>
+        </div>
+
+        <div class="login-form">
+            <div class="logo">
+                <h2>Sign In</h2>
+            </div>
+            
+            <div class="helper-text">
+                Authenticate with the email you used to join BAS
+            </div>
+            
+            <form action="{{ url_for('request_magic_link') }}" method="POST">
+                <div class="form-group">
+                    <input type="email" class="form-control" id="email" name="email" required 
+                           placeholder="Enter your email">
                 </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-    <div class="logo">
-        <h2>Sign In</h2>
-    </div>
-    
-    <div class="helper-text">
-        Authenticate with the email you used to sign up for BAS
-    </div>
-    
-    <form action="{{ url_for('request_magic_link') }}" method="POST">
-        <div class="form-group">
-            <input type="email" class="form-control" id="email" name="email" required 
-                   placeholder="Enter your email">
+                <div class="form-text">
+                    We'll send you a magic link to sign in.
+                </div>
+                <button type="submit" class="btn-primary">Send Magic Link</button>
+            </form>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} fade-out">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
         </div>
-        <div class="form-text">
-            We'll send you a magic link to sign in.
-        </div>
-        <button type="submit" class="btn-primary">Send Magic Link</button>
-    </form>
+    </div>
 </div>
 {% endblock %} 

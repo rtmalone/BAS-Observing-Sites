@@ -3,7 +3,6 @@
 {% block title %}BAS Observing Sites{% endblock %}
 
 {% block content %}
-    {% include 'context_info.html' %}
     <div class="page-layout">
         {% include 'map.html' %}
         <div class="form-section">
@@ -55,7 +54,6 @@
                     </div>
                     <textarea id="description" name="description" rows="3" required></textarea>
                 </div>
-                <p class="form-help">Press Add to Map to save the location</p>
                 <div class="button-group">
                     <button type="submit">Add to Map</button>
                 </div>
