@@ -16,9 +16,15 @@ This application allows members to:
 - **Site Details**: Each location includes:
   - Title
   - Description
-  - Contact email
+  - Optional contact email (opt-in based)
   - Precise coordinates
   - Directions link
+- **Privacy Controls**: 
+  - Users can choose whether to display their email as a contact point for each location
+- **Secure Authentication**:
+  - Passwordless authentication using email magic links
+  - Magic links expire after 1 hour for security
+  - One-time use links prevent replay attacks
 
 ## Technical Stack
 
